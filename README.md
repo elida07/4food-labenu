@@ -20,7 +20,7 @@ Fiquei responsável por:
 **Necessário criação de login**
 
 Caso queira acessar: 
-- login: astrodev@gmail.com
-- password: 123456
+- login: elidinha2@gmail.com
+- password: 12345678
 
 https://kaput-fold.surge.sh/login
