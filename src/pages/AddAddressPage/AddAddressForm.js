@@ -6,6 +6,7 @@ import axios from 'axios';
 import { base_url } from '../../constants/urls';
 import { goToFeed } from '../../routes/coordinator';
 import { Button, TextField, Typography } from '@mui/material';
+import Header from "../../components/Header/Header";
 import useProtectedPage from '../../Hooks/useProtectedPage';
 
 const CreateAddressForm = () => {
@@ -37,97 +38,101 @@ const CreateAddressForm = () => {
           "Content-Type": "application/json"
         }
       })
-      .then(response => {
-        alert("Endereço adiconado com sucesso");
+      .then(res => {
+        localStorage.setItem("token", res.data.token);
+        alert("Endereço adicionado com sucesso");
         goToFeed(history);
         clear();
       })
       .catch(error => {
         alert("Desculpe, houve um erro");
-        console.log(error.response)
+        console.log(error.response.message)
       })
   }
 
   return (
-    <form onSubmit={onSubmitForm}>
-      <ScreenContainer>
-        <Typography sx={{ mb: 2 }} variant="subtitle1" gutterBottom component="div">
-          <strong>Meu endereço</strong>
-        </Typography>
-        <TextField
-          sx={{ mb: 2, maxWidth: 400 }}
-          name="street"
-          type="text"
-          onChange={onChange}
-          label="Logradouro"
-          placeholder="Rua / Av"
-          required
-          fullWidth
-        />
+    <>
+      <Header />
+      <form onSubmit={onSubmitForm}>
+        <ScreenContainer>
+          <Typography sx={{ mb: 2 }} variant="subtitle1" gutterBottom component="div">
+            <strong>Meu endereço</strong>
+          </Typography>
+          <TextField
+            sx={{ mb: 2, maxWidth: 400 }}
+            name="street"
+            type="text"
+            onChange={onChange}
+            label="Logradouro"
+            placeholder="Rua / Av"
+            required
+            fullWidth
+          />
 
-        <TextField
-          sx={{ mb: 2, maxWidth: 400 }}
-          name="number"
-          type="text"
-          onChange={onChange}
-          label="Número"
-          placeholder="Número"
-          required
-          fullWidth
-        />
+          <TextField
+            sx={{ mb: 2, maxWidth: 400 }}
+            name="number"
+            type="text"
+            onChange={onChange}
+            label="Número"
+            placeholder="Número"
+            required
+            fullWidth
+          />
 
-        <TextField
-          sx={{ mb: 2, maxWidth: 400 }}
-          name="complement"
-          type="text"
-          onChange={onChange}
-          label="Complemento"
-          placeholder="Complemento"
-          fullWidth
-        />
+          <TextField
+            sx={{ mb: 2, maxWidth: 400 }}
+            name="complement"
+            type="text"
+            onChange={onChange}
+            label="Complemento"
+            placeholder="Complemento"
+            fullWidth
+          />
 
-        <TextField
-          sx={{ mb: 2, maxWidth: 400 }}
-          name="neighbourhood"
-          type="text"
-          onChange={onChange}
-          label="Bairro"
-          placeholder="Bairro"
-          required
-          fullWidth
-        />
+          <TextField
+            sx={{ mb: 2, maxWidth: 400 }}
+            name="neighbourhood"
+            type="text"
+            onChange={onChange}
+            label="Bairro"
+            placeholder="Bairro"
+            required
+            fullWidth
+          />
 
-        <TextField
-          sx={{ mb: 2, maxWidth: 400 }}
-          name="city"
-          type="text"
-          onChange={onChange}
-          label="Cidade"
-          placeholder="Cidade"
-          required
-          fullWidth
-        />
+          <TextField
+            sx={{ mb: 2, maxWidth: 400 }}
+            name="city"
+            type="text"
+            onChange={onChange}
+            label="Cidade"
+            placeholder="Cidade"
+            required
+            fullWidth
+          />
 
-        <TextField
-          sx={{ mb: 2, maxWidth: 400 }}
-          name="state"
-          type="text"
-          onChange={onChange}
-          label="Estado"
-          placeholder="Estado"
-          placeholder="Estado"
-          required
-          fullWidth
-        />
+          <TextField
+            sx={{ mb: 2, maxWidth: 400 }}
+            name="state"
+            type="text"
+            onChange={onChange}
+            label="Estado"
+            placeholder="Estado"
+            placeholder="Estado"
+            required
+            fullWidth
+          />
 
-        <Button
-          sx={{ maxWidth: 400, textTransform: 'none' }}
-          type="submit"
-          color="primary"
-          variant="contained"
-          fullWidth>Salvar</Button>
-      </ScreenContainer>
-    </form>
+          <Button
+            sx={{ maxWidth: 400, textTransform: 'none' }}
+            type="submit"
+            color="primary"
+            variant="contained"
+            fullWidth>Salvar</Button>
+        </ScreenContainer>
+      </form>
+    </>
   );
 }
 
