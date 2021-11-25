@@ -2,12 +2,17 @@ import React, { useContext } from "react";
 import useForm from "../../Hooks/useForm";
 import { signUp } from "../../services/SignupLogin";
 import { useHistory } from "react-router";
-import { goToCreateAddress } from "../../routes/coordinator";
 import useUnprotectedPage from "../../Hooks/useUnprotectedPage";
 import { ScreenContainer, FormContainer } from "./SignUpPageStyles";
 import { Button, TextField, Typography } from '@mui/material';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import logo from "../../assets/red-logo.svg";
 import { GlobalContext } from '../../context/GlobalContext'
+import Header from "../../components/Header/Header";
 
 const SignUpPage = () => {
   useUnprotectedPage();
@@ -18,6 +23,21 @@ const SignUpPage = () => {
   setChangePage(true)
   setShowLine(true)
 
+  const [values, setValues] = React.useState({
+    showPassword: false,
+  });
+
+  const handleClickShowPassword = () => {
+    setValues({
+      ...values,
+      showPassword: !values.showPassword,
+    });
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   const [form, onChange, clearForm] = useForm({
     name: "",
     email: "",
@@ -27,96 +47,117 @@ const SignUpPage = () => {
 
   const onSubmitForm = (e) => {
     e.preventDefault();
-    signUp(form, clearForm);
+    signUp(form, clearForm, history);
     clearForm();
-    goToCreateAddress(history);
   };
+  
   return (
-    <ScreenContainer>
-      <img src={logo} />
-      <Typography
-        sx={{ mt: 3., mb: 3 }}
-        variant="subtitle1"
-        gutterBottom
-        component="div">
-        <strong>Cadastrar</strong>
-      </Typography>
-      <FormContainer onSubmit={onSubmitForm}>
-        <TextField
-          sx={{ mb: 2, maxWidth: 400 }}
-          name={"name"}
-          type="text"
-          onChange={onChange}
-          value={form.name}
-          label="Nome"
-          placeholder="Nome e sobrenome"
-          required
-          fullWidth
-        />
+    <>
+      <Header />
+      <ScreenContainer>
+        <img src={logo} />
+        <Typography
+          sx={{ mt: 3., mb: 3 }}
+          variant="subtitle1"
+          gutterBottom
+          component="div">
+          <strong>Cadastrar</strong>
+        </Typography>
+        <FormContainer onSubmit={onSubmitForm}>
+          <TextField
+            sx={{ mb: 2, maxWidth: 400 }}
+            name={"name"}
+            type="text"
+            onChange={onChange}
+            value={form.name}
+            label="Nome"
+            placeholder="Nome e sobrenome"
+            required
+            fullWidth
+          />
 
-        <TextField
-          sx={{ mb: 2, maxWidth: 400 }}
-          name={"email"}
-          type="email"
-          onChange={onChange}
-          value={form.email}
-          label="E-mail"
-          placeholder="email@email.com"
-          required
-          fullWidth
-        />
+          <TextField
+            sx={{ mb: 2, maxWidth: 400 }}
+            name={"email"}
+            type="email"
+            onChange={onChange}
+            value={form.email}
+            label="E-mail"
+            placeholder="email@email.com"
+            required
+            fullWidth
+          />
 
-        <TextField
-          sx={{ mb: 2, maxWidth: 400 }}
-          name={"cpf"}
-          type="text"
-          onChange={onChange}
-          value={form.cpf}
-          label="CPF"
-          placeholder="000.000.000-00"
-          required
-          fullWidth
-          title="Insira um CPF valido"
-          pattern="(\d{3}\.?\d{3}\.?\d{3}-?\d{2})|(\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2})"
-        />
-
-        <TextField
-          sx={{ mb: 2, maxWidth: 400 }}
-          name={"password"}
-          type="password"
-          onChange={onChange}
-          value={form.passoword}
-          label="Senha"
-          placeholder="Mínimo 8 caracteres"
-          required
-          fullWidth
-          id="txtPassword"
-          title="Senha precisa ter minimo de 8 caracteres e pelo menos 1 letra e 1 numero"
-          pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
-        />
-
-        <TextField
-          sx={{ mb: 2, maxWidth: 400 }}
-          name={"password"}
-          type="password"
-          onChange={onChange}
-          value={form.passoword}
-          label="Confirmar senha"
-          placeholder="Confirmar a senha anterior"
-          required
-          fullWidth
-          id="txtPassword"
-          title="Senha precisa ter minimo de 8 caracteres e pelo menos 1 letra e 1 numero"
-          pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
-        />
-        <Button
-          sx={{ maxWidth: 400, textTransform: 'none' }}
-          type="submit"
-          color="primary"
-          variant="contained"
-          fullWidth>Criar</Button>
-      </FormContainer>
-    </ScreenContainer>
+          <TextField
+            sx={{ mb: 2, maxWidth: 400 }}
+            name={"cpf"}
+            type="text"
+            onChange={onChange}
+            value={form.cpf}
+            label="CPF"
+            placeholder="000.000.000-00"
+            required
+            fullWidth
+            title="Insira um CPF valido"
+            pattern="(\d{3}\.?\d{3}\.?\d{3}-?\d{2})|(\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2})"
+          />
+          <OutlinedInput
+            id="outlined-adornment-password"
+            sx={{ mb: 2, maxWidth: 400 }}
+            name={"password"}
+            type={values.showPassword ? 'text' : 'password'}
+            label="Confirmar senha"
+            placeholder="Confirme sua senha"
+            inputProps={{ pattern: "^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" }}
+            required
+            fullWidth
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+          <OutlinedInput
+            id="outlined-adornment-password"
+            sx={{ mb: 2, maxWidth: 400 }}
+            name={"password"}
+            type={values.showPassword ? 'text' : 'password'}
+            label="Confirmar senha"
+            value={form.password}
+            placeholder="Confirme sua senha"
+            inputProps={{ pattern: "^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" }}
+            required
+            fullWidth
+            onChange={onChange}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+          <Button
+            sx={{ maxWidth: 400, textTransform: 'none' }}
+            type="submit"
+            color="primary"
+            variant="contained"
+            fullWidth>Criar</Button>
+        </FormContainer>
+      </ScreenContainer>
+    </>
   );
 };
 

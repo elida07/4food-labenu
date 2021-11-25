@@ -1,27 +1,23 @@
 import axios from "axios";
 import { base_url } from "../constants/urls";
-import { goToFeed } from "../routes/coordinator";
+import { goToCreateAddress, goToFeed } from "../routes/coordinator";
 
-export const signUp = (body, clearForm) => {
-  const header = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
+export const signUp = (body, clearForm, history) => {
 
   axios
-    .post(`${base_url}/fourFoodA/signup`, body, header)
+    .post(`${base_url}/fourFoodA/signup`, body)
     .then((res) => {
-      // localStorage.setItem("token", res.data.token);
+      localStorage.setItem("token", res.data.token);
       clearForm();
       alert("Usuario cadastrado com sucesso!");
+      goToCreateAddress(history)
     })
     .catch((err) => {
-      console.log(err);
+      alert(err.response.message);
     });
 };
 
-export const login = (body, clearForm) => {
+export const login = (body, clearForm, history) => {
   const header = {
     headers: {
       "Content-Type": "application/json",
@@ -33,9 +29,10 @@ export const login = (body, clearForm) => {
     .then((res) => {
       localStorage.setItem("token", res.data.token);
       alert("Login com sucesso!");
-      clearForm();
+      goToFeed(history);
     })
     .catch((err) => {
-      console.log(err);
+      alert(err.response.message);
+      clearForm();
     });
 };
